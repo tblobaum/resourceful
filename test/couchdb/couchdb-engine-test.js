@@ -138,7 +138,7 @@ vows.describe('resourceful/engines/database').addVows({
       topic: function (r) {
         r.all(this.callback);
       },
-      "should respond with an array of all records": function (e, obj) {
+      "should respond with an array of all 'User' records": function (e, obj) {
         assert.isArray(obj);
         assert.equal(obj.length, 4);
       }

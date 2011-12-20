@@ -465,9 +465,9 @@ vows.describe('resourceful').addVows({
       "with default Resources": {
         topic: function () {
           new(resourceful.engines.Memory)({uri: 'data-queries'}).load([
-            { _id: 'bob', age: 35, hair: 'black'},
-            { _id: 'tim', age: 16, hair: 'brown'},
-            { _id: 'mat', age: 29, hair: 'black'}
+            { _id: 'bob', age: 35, hair: 'black', resource: 'Poop'},
+            { _id: 'tim', age: 16, hair: 'brown', resource: 'Poop'},
+            { _id: 'mat', age: 29, hair: 'black', resource: 'Poop'}
           ]);
           return resourceful.define('poop').connect('memory://data-queries');
         },
@@ -491,15 +491,6 @@ vows.describe('resourceful').addVows({
               assert.isArray(obj);
               assert.equal(obj.length, 0);
             }
-          }
-        },
-        "an all() request": {
-          topic: function (r) {
-            r.all(this.callback);
-          },
-          "should respond with an array of all records": function (e, obj) {
-            assert.isArray(obj);
-            assert.equal(obj.length, 3);
           }
         },
         "a create() request": {
@@ -563,11 +554,9 @@ vows.describe('resourceful').addVows({
             this.Factory = r;
             r.all(this.callback);
           },
-          "should respond with a mix of Resource and Article instances": function (e, obj) {
+          "should respond with Article instances": function (e, obj) {
             assert.equal(obj[0].constructor, resourceful.resources.Article);
             assert.equal(obj[1].constructor, resourceful.resources.Article);
-            assert.equal(obj[2].constructor, this.Factory);
-            assert.equal(obj[3].constructor, this.Factory);
           }
         }
       }
