@@ -25,7 +25,7 @@ vows.describe('resourceful').addVows({
       },
       "which can be called": {
         topic: function (Factory) {
-          return new(Factory);
+          return new Factory;
         },
         "to return Resource instances which have prototype methods": function (resource) {
           assert.isFunction(resource.save);
@@ -53,7 +53,7 @@ vows.describe('resourceful').addVows({
         topic: function (Article) {
           this.constructor = Article;
           Article.prototype.data = 41;
-          return new(Article);
+          return new Article;
         },
         "returning Article instances": function (article) {
           assert.isObject(article);
@@ -114,7 +114,7 @@ vows.describe('resourceful').addVows({
     },
     "When instantiated": {
       topic: function (R) {
-        return new(R)({ title: 'The Great Gatsby' });
+        return new R({ title: 'The Great Gatsby' });
       },
       "should respond to toString()": function (r) {
         assert.equal(r.toString(), '{"title":"The Great Gatsby","resource":"Book"}');
@@ -464,7 +464,7 @@ vows.describe('resourceful').addVows({
     "on the Resource factory": {
       "with default Resources": {
         topic: function () {
-          new(resourceful.engines.Memory)({uri: 'data-queries'}).load({
+          new resourceful.engines.Memory({uri: 'data-queries'}).load({
             bob: { _id: 42, age: 35, hair: 'black'},
             tim: { _id: 43, age: 16, hair: 'brown'},
             mat: { _id: 44, age: 29, hair: 'black'}
@@ -547,7 +547,7 @@ vows.describe('resourceful').addVows({
       "with user Resources": {
         topic: function () {
           resourceful.resources.Article = resourceful.define('article');
-          var connection = new(resourceful.engines.Memory)('articles').load({
+          var connection = new resourceful.engines.Memory('articles').load({
             42: { _id: 42, title: 'on flasks', resource: 'Article'},
             43: { _id: 43, title: 'on eras',   resource: 'Article'},
             44: { _id: 44, title: 'on people', resource: 'Article'}
@@ -573,7 +573,7 @@ vows.describe('resourceful').addVows({
       "with heterogenous data": {
         topic: function () {
           resourceful.resources.Article = resourceful.define('article');
-          var connection = new(resourceful.engines.Memory)('heterogenous').load({
+          var connection = new resourceful.engines.Memory('heterogenous').load({
             42:  { _id: 42, title: 'on flasks', resource: 'Article'},
             bob: { _id: 42, age: 35, hair: 'black'},
             tim: { _id: 43, age: 16, hair: 'brown'},
@@ -600,11 +600,11 @@ vows.describe('resourceful').addVows({
     "on a Resource instance": {
       "with a default resource": {
         topic: function () {
-          var conn = this.connection = new(resourceful.engines.Memory)();
+          var conn = this.connection = new resourceful.engines.Memory();
           this.Resource = resourceful.define(function () {
             this.connection = conn;
           });
-          return new(this.Resource)({ _id: '42', name: "bob" });
+          return new this.Resource({ _id: '42', name: "bob" });
         },
         "the `isNewRecord` flag should be true": function (r) {
           assert.strictEqual(r.isNewRecord, true);
@@ -641,7 +641,7 @@ vows.describe('resourceful').addVows({
           this.User = resourceful.define('user', function () {
             this.connection = conn;
           });
-          return new(this.User)({ _id: '55', name: "fab" });
+          return new this.User({ _id: '55', name: "fab" });
         },
         "a save() query": {
           topic: function (r) {
