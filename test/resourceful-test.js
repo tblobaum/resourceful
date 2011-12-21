@@ -4,7 +4,6 @@ var path = require('path'),
     http = require('http'),
     fs = require('fs'),
     vows = require('vows'),
-    cradle = require('cradle'),
     resourceful = require('../lib/resourceful');
 
 vows.describe('resourceful').addVows({
