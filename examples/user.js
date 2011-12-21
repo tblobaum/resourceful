@@ -72,7 +72,6 @@ User.create({_id: 'kohai-clone', name: 'Kohai clone'}, function (err, user) {
   if (err) console.log(err)
   console.log('Resource#create', user._id)
 })
- 
 
 // ** instance methods
 var user = new User({_id: 'kohai-clone', name: 'Kohai Clone'})
@@ -84,27 +83,24 @@ user.save(function (e) {
   console.log('save', user._id)
 })
 
-//var user2 = new User({_id: 'kohai-clone2', name: 'Kohai Clone2'})
 
-//// update
-//user2.visits++
-//user2.name = 'Kohai Clone2'
-//user2.update(user2, function (e, user) {
-//  if (e) console.log(e)
-//  console.log('update', user._id)
-//  
-//})
-
+var user2 = new User({_id: 'kohai-clone2', name: 'Kohai Clone2'})
+// update
+user2.visits++
+user2.name = 'Kohai Clone2'
+user2.update(user2, function (e, user) {
+  if (e) console.log(e)
+  console.log('update', user._id)
+})
 // reload
-//user.reload(function (e, user) {
-//  if (e) console.log(e)
-//  console.log('reload', user._id)
-//  
+user.reload(function (e, user) {
+  if (e) console.log(e)
+  console.log('reload', user._id)
   // destroy
-//  user.destroy(function (e) {
-//    if (e) console.log(e)
-//    console.log('destroy', user._id)
-//  })
-//  
-//})
+  user.destroy(function (e) {
+    if (e) console.log(e)
+    console.log('destroy', user._id)
+  })
+  
+})
 
