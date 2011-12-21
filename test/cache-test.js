@@ -12,7 +12,7 @@ var Article = resourceful.define('Article', function () {
 vows.describe('resourceful/resource/cache', {
   "When creating an instance, and saving it": {
     topic: function () {
-      this.article = new(Article)({ _id: '43', title: "The Last Article", published: true });
+      this.article = new Article({ _id: '43', title: "The Last Article", published: true });
       this.article.save(this.callback);
     },
     "and then loading it back up with `get()`": {
@@ -35,7 +35,7 @@ vows.describe('resourceful/resource/cache', {
 }).addBatch({
   "When creating an instance, and saving it": {
     topic: function () {
-      this.article = new(Article)({ _id: '43', title: "The Last Article", published: true });
+      this.article = new Article({ _id: '43', title: "The Last Article", published: true });
       this.article.save(this.callback);
     },
     "and then clearing the cache and loading it back up with `get()`": {
