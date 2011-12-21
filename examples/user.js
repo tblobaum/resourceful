@@ -1,104 +1,110 @@
 var resourceful = require('../lib/resourceful')
 
 var User = resourceful.define('user', function () {
-  this.use('couchdb')
+  this.use('redis', {database:'user'})
   this.string('name')
   this.number('visits').default(0)
 })
 
+var total = 1000
 console.time('benchmark')
 
-for (var i=0;i<1000;i++) {
+var j = total 
+for (var i=0;i<total;i++) {
   makeUser()
 }
 
 function makeUser() {
-  // ** instance methods
   var user = new User({_id: 'kohai-'+i, name: 'Kohai'+i})
-  user.visits++
-
-  console.log(user.name)
+  
   // save
   user.save(function (e) {
     if (e) console.log(e)
-    console.log('0 save User:', user.name)
-    
+
     // destroy
-  //  User.destroy('Kohai', function (err, user) {
-  //    if (err) console.log(err)
-  //    console.log('3 destroy User')
-  //  })
+    User.destroy(user._id, function (e) {
+      if (e) console.log(e)
+      //console.log(user.name)
+      // benchmark
+      j--
+      if (j < 2) {
+        console.timeEnd('benchmark')
+        console.log('requests: '+ total)
+      }
+      
+    })
     
   })
+
 }
 
-
-// get
-User.get('Kohai', function (err, user) {
-  if (err) console.log(err)
-  console.log('1 get User:', user.name)
+// ** class methods
+var user = new User({_id: 'kohai-master', name: 'Kohai Master'})
+user.save(function (e) {
+  if (e) console.log(e)
+  // get
+  User.get('kohai-master', function (err, user) {
+    if (err) console.log(err)
+    console.log('Resource#get', user._id)
+  })
 })
 
 // update
-User.update('Kohai', {name: 'Kohai Twin'}, function (err, user) {
+User.update('kohai-1', {_id:'kohai-1', name: 'Kohai One'}, function (err) {
   if (err) console.log(err)
-  console.log('2 update User:', user.name)
+  console.log('Resource#update')
 })
 
 // all
 User.all(function (err, users) {
   if (err) console.log(err)
-  console.log('4 all User count:', users.length)
+  console.log('Resource#all', users.length)
 })
 
 // save
-User.save(new User({_id: 'Kohai', name: 'Kohai'}), function (e) {
+User.save(new User({_id: 'kohai-twin', name: 'Kohai Twin'}), function (e) {
   if (e) console.log(e)
-  console.log('5 save User:', user.name)
+  console.log('Resource#save')
 })
 
 // create
-User.create({_id: 'Kohai', name: 'Kohai'}, function (err, user) {
+User.create({_id: 'kohai-clone', name: 'Kohai clone'}, function (err, user) {
   if (err) console.log(err)
-  console.log('6 create User:', user.name)
+  console.log('Resource#create', user._id)
 })
  
-console.timeEnd('benchmark')
 
-setTimeout(function () {
+// ** instance methods
+var user = new User({_id: 'kohai-clone', name: 'Kohai Clone'})
+user.visits++
 
-  // ** instance methods
-  
-  console.log('new user should not break')
-  var user = new User({_id: 'kohai-master', name: 'Kohai Master'})
-  user.visits++
+// save
+user.save(function (e) {
+  if (e) console.log(e)
+  console.log('save', user._id)
+})
 
-  console.log('save should not break')
-  // save
-  user.save(function (e) {
-    if (e) console.log(e)
-    console.log('7 save User:', user._id)
-  })
+//var user2 = new User({_id: 'kohai-clone2', name: 'Kohai Clone2'})
 
-  console.log('update should not break')
-  // update
-  user.update({ name: 'Kohai Clone' }, function (e, user) {
-    if (e) console.log(e)
-    console.log('8 update User:', user._id)
-  })
-  
-  console.log('reload should not break')
+//// update
+//user2.visits++
+//user2.name = 'Kohai Clone2'
+//user2.update(user2, function (e, user) {
+//  if (e) console.log(e)
+//  console.log('update', user._id)
+//  
+//})
+
+// reload
+//user.reload(function (e, user) {
+//  if (e) console.log(e)
+//  console.log('reload', user._id)
+//  
   // destroy
-  //user.destroy(function (e, bool) {
-  //  if (e) console.log(e)
-  //  console.log('9 destroy User', bool)
-  //})
-
-  // reload
-  user.reload(function (e, user) {
-    if (e) console.log(e)
-    console.log('10 reload User:', user)
-  })
-  
-}, 5000)
+//  user.destroy(function (e) {
+//    if (e) console.log(e)
+//    console.log('destroy', user._id)
+//  })
+//  
+//})
 
